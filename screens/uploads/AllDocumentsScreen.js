@@ -3,7 +3,7 @@ import React  from 'react';
 import { FlatList, StyleSheet,View,Text} from 'react-native';
 import {useSelector} from 'react-redux'
 import DocumentItem from '../../components/DocumentItem'
-export default function UploadsScreen() {
+const AllDocumentsScreen = (props) =>{
   const documents = useSelector(state => state.documents.userDocuments)
   return (
           <View style={styles.screen}>
@@ -14,7 +14,7 @@ export default function UploadsScreen() {
                 url={ItemData.item.url}
                 title={ItemData.item.title}
                 tags = {ItemData.item.tags}
-                onChangeTags = {()=>{console.log('ADD TAGS!')}}
+                onChangeTags = {()=> props.navigation.navigate('EditDocument',{documentId:ItemData.item.id,documentTitle:ItemData.item.title})}
 
               ></DocumentItem>}>
 
@@ -22,7 +22,7 @@ export default function UploadsScreen() {
         </View>)
 
 }
-UploadsScreen.navigationOptions={
+AllDocumentsScreen.navigationOptions={
   headerTitle:"Your uploads"
 }
 
@@ -34,3 +34,4 @@ const styles = StyleSheet.create({
     // alignItems:'center'
 }
 });
+export default AllDocumentsScreen

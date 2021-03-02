@@ -2,14 +2,14 @@
 import React  from 'react';
 import { StyleSheet,View,Text} from 'react-native';
 
-export default function UploadsScreen() {
+export default function AddDocumentScreen() {
   
   return (
           <View style={styles.screen}>
               <Text>All docs to come!</Text>
         </View>)
 }
-UploadsScreen.navigationOptions={
+AddDocumentScreen.navigationOptions={
   headerTitle:"Please Upload"
 }
 

@@ -1,9 +1,10 @@
 import React from 'react';
-import {View,Text,Image,StyleSheet,Button} from 'react-native'
+import {View,Text,Image,StyleSheet,Button,TouchableOpacity} from 'react-native'
 import Colors from '../constants/Colors'
 const DocumentItem = props => {
     const tagList = props.tags.map((tag,ind) => <View style={styles.tag} key={ind}><Text  style={styles.tagText}>{tag}</Text></View>)
-    return <View style={styles.document}>
+    return <TouchableOpacity onPress={props.onChangeTags}> 
+        <View style={styles.document}>
         <View style={styles.imgcontainer}> 
         <Image style= {styles.image} source={{uri:props.url}}/>
         </View>
@@ -17,6 +18,9 @@ const DocumentItem = props => {
 
 
     </View>
+</TouchableOpacity>    
+    
+
 }
 const styles =StyleSheet.create({
     document:{
