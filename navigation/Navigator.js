@@ -21,8 +21,8 @@ const UploadsNavigator = createStackNavigator({
 )
 
 const MainNavigator = createSwitchNavigator({
-    Startup:StartupScreen,
-    Auth:AuthNavigator,
+    // Startup:StartupScreen,
+    // Auth:AuthNavigator,
     Uploads: UploadsNavigator
 },{
     defaultNavigationOptions:{

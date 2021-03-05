@@ -1,10 +1,11 @@
 import React from 'react';
 import {View,Text,Image,StyleSheet,Button,TouchableOpacity} from 'react-native'
 import Colors from '../constants/Colors'
+import Card from '../components/UI/Card'
 const DocumentItem = props => {
     const tagList = props.tags.map((tag,ind) => <View style={styles.tag} key={ind}><Text  style={styles.tagText}>{tag}</Text></View>)
     return <TouchableOpacity onPress={props.onChangeTags}> 
-        <View style={styles.document}>
+        <Card style={styles.document}>
         <View style={styles.imgcontainer}> 
         <Image style= {styles.image} source={{uri:props.url}}/>
         </View>
@@ -14,26 +15,22 @@ const DocumentItem = props => {
         </View>
         <View style={styles.btncontainer}>
             <Button title="Change Tags" color={Colors.primary} onPress={props.onChangeTags}/>
+            <Button title="Delete" color='red' onPress={props.onDeleteDocument}/>
+
         </View>
 
 
-    </View>
+    </Card>
 </TouchableOpacity>    
     
 
 }
 const styles =StyleSheet.create({
     document:{
-shadowColor:'black',
-shadowOpacity:0.3,
-shadowOffset:{width:0,height:2},
-shadowRadius:8,
-elevation:5,
-borderRadius:10,
-backgroundColor:'white',
-height:300,
-width:'90%',
-margin:20
+        margin:20,
+
+
+height:300
     },
     imgcontainer:{
         width:'100%',
