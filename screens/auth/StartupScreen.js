@@ -31,8 +31,11 @@ const StartupScreen = props => {
                 return 
 
             }
-            props.navigation.navigate('Uploads')
             dispatch(authActions.authenticate(userId,token,refreshToken))
+
+            props.navigation.navigate('Uploads')
+            // props.navigation.navigate('Auth')
+            
         }
         tryLogin()
     },[dispatch])

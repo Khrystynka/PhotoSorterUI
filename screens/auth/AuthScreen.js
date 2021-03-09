@@ -61,13 +61,20 @@ const AuthScreen = (props) => {
     }
     setIsLoading(true)
     try{
+      console.log('authscreen dispatching action',action)
      await dispatch(action)
      setIsAuth(true)
      console.log('============================================================================')
     }
-    catch(err ){
-      console.log('Custom error messagie',err.message)
-      setError(err.message)
+    catch(e ){
+      console.log('Custom error messagie',e);
+
+      console.log(e.fileName)                   // "someFile.js"
+  console.log(e.lineNumber)                 // 10
+  console.log(e.columnNumber)               // 0
+  console.log(e.stack)                      // "@Scratchpad/2:2:9\n"
+
+      setError(e.message)
     console.log('here is error from catch', error)
   }
     

@@ -11,7 +11,9 @@ import Card from '../../components/UI/Card';
 const EditDocumentScreen = (props) => {
 
   console.log("Rendering component EditScreen");
-
+  const token = useSelector(state=>state.auth.token)
+  console.log('edit screen token' ,token)
+  
   const documentId = props.navigation.getParam('documentId')
   const document= useSelector(state=> state.documents.userDocuments.find(doc => doc.id ===documentId))
   // console.log(document)
@@ -33,10 +35,10 @@ const EditDocumentScreen = (props) => {
   const updateDocumentHandler=useCallback(
     () => {
       console.log('Updaing document with tags',tags)
-      dispatch(documentActions.updateDocument(documentId,tags))
+      dispatch(documentActions.updateDocument(documentId,tags,token))
       props.navigation.goBack()
     },
-    [dispatch,tags]
+    [dispatch,tags,token]
   )
   const addTagHandler=()=>{
     console.log('Updating document')

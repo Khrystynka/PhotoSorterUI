@@ -1,58 +1,35 @@
-import DOCUMENTS from '../../DummyDocs/data'
-import {CREATE_DOCUMENT} from '../actions/documents'
-import {DELETE_DOCUMENT} from '../actions/documents'
-import {UPDATE_DOCUMENT} from '../actions/documents'
+import {CHANGED_DOCUMENTS} from '../actions/documents'
+import {LOAD_DOCUMENTS} from '../actions/documents'
+
 import Document from '../../models/Document'
 
 
 const initialState={
-    userDocuments: DOCUMENTS,
+    touched:true,
+    userDocuments: [],
     userTags:['family','friends','sisters']
 
 }
 export default (state= initialState,action) =>{
-    console.log('reducer actiontype',action.type)
+    console.log('document reducer actiontype',action.type)
     switch (action.type){
-    case CREATE_DOCUMENT:
-        const newDocument=new Document(
-            '0',
-            action.productData.ownerId,
-            action.productData.title,
-            action.productData.tags,
-            'url'
-            )
+    case CHANGED_DOCUMENTS:
         return {
             ...state,
-            userDocuments:state.userDocuments.concat(newDocument)
+            touched:true
         }
-    case UPDATE_DOCUMENT:
-        // console.log('inside update document reducer')
-            const documentInd=state.userDocuments.findIndex(doc =>doc.id ===action.documentId)
-            // console.log(documentInd,state.userDocuments[documentInd])
-            const updatedDocument = new Document (
-                state.userDocuments[documentInd].id,
-            
-                state.userDocuments[documentInd].ownerId,
-                state.userDocuments[documentInd].title,
-                action.tags,
-                state.userDocuments[documentInd].url,
-            )
-            const updatedUserDocuments=[...state.userDocuments]
-            updatedUserDocuments[documentInd] = updatedDocument
-            // console.log('updated state', updatedUserDocuments)
-        return{
-                ...state,
-                userDocuments:updatedUserDocuments
-            }
-        case DELETE_DOCUMENT:
-            console.log('in delete reducer')
-            const newUserDocuments = state.userDocuments.filter(item => item.id!=action.documentId)
-            console.log('new state',newUserDocuments)
-            return{
-                    ...state,
-                    userDocuments:newUserDocuments
-                }
-        default:
+    
+    case LOAD_DOCUMENTS:
+                console.log('in load document reducer')
+                const uploadedDocuments = action.docList.map(item => new Document((item.id).toString(),(item.user_id).toString(),item.title,item.tags,item.url))
+                console.log('doc list ready for state',uploadedDocuments)
+                // console.log('new state',newUserDocuments)
+                return{
+                        ...state,
+                        userDocuments:uploadedDocuments,
+                        touched:false
+                    }
+    default:
             return state
             }
 }

@@ -37,8 +37,16 @@ export const signup = (email,password) =>{
     
         //    calculate date and time untill token will expire
         //    multiply by 60000 to convert minutes to ms
+        const parseJwt = (token) => {
+            try {
+              return JSON.parse(atob(token.split('.')[1]));
+            } catch (e) {
+              return null;
+            }
+          };
+        const tokenExpire = parseJwt(resData.access_token.toString())
         const tokenExpDate = new Date(new Date().getTime()+parseInt(resData.token_expires*60000)).toISOString()
-
+        console.log('token expire parsed from token',tokenExpire,'calculated',tokenExpDate)
         console.log(tokenExpDate)
         saveDataToStorage(resData.access_token,resData.user_id,resData.refresh_token,tokenExpDate)
 
@@ -67,11 +75,22 @@ export const login = (email,password) =>{
             throw new Error('login email or password are not valid! Please try again with another credentials!')
         }
         console.log('RESPONSE FROM FLASK login',resData)
-        
+        console.log('passing this to auth reucer',resData.user_id,resData.access_token,resData.refresh_token)
         dispatch(authenticate(resData.user_id,resData.access_token,resData.refresh_token))
     //    calculate date and time untill token will expire
     //    multiply by 60000 to convert minutes to ms
         const tokenExpDate = new Date(new Date().getTime()+parseInt(resData.token_expires*60000)).toISOString()
+        const parseJwt = (token) => {
+            try {
+              return JSON.parse(atob(token.split('.')[1]));
+            } catch (e) {
+              return null;
+            }
+          };
+        const token = resData.access_token.toString()
+        const tokenExpire = parseJwt(token)
+        console.log('token expire parsed from token',tokenExpire,'calculated',tokenExpDate)
+        console.log(tokenExpDate)
         // const currtime = new Date(new Date().getTime()).toISOString()
         saveDataToStorage(resData.access_token,resData.user_id,resData.refresh_token,tokenExpDate)
         
