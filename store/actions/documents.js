@@ -119,7 +119,7 @@ export const loadDocuments=(token)=>{
 return async dispatch =>{
     console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
     console.log('Reaching flask get_uploadds')
-        const resp = await fetch('http://127.0.0.1:5000/get_uploads',{
+        const docsResp = await fetch('http://127.0.0.1:5000/get_uploads',{
             method:'GET',
             headers:{
                 'Content-Type': "application/json",          
@@ -127,24 +127,25 @@ return async dispatch =>{
 
             }            
         })
-        const respData = await resp.json()
-        console.log('user uploads',respData)
+        const docsData = await docsResp.json()
+        const tagsResp = await fetch('http://127.0.0.1:5000/get_tags',{
+            method:'GET',
+            headers:{
+                'Content-Type': "application/json",          
+                'Authorization': `Bearer ${token}`
 
-        if (!resp.ok){
+            }            
+        })
+        const tagsData = await tagsResp.json()
+
+        if (!docsResp.ok){
             throw new Error('No uploads found for current user')
-
-
         }
-        else{
-
-        // dispatch({type:LOAD_DOCUMENTS, documentList:{
-        //     id:respData['upload_id'].toString(),
-        //     title:doc.name,
-        //     tags:tags,
-        //     ownerId:userId.toString(),
-        //     url:respData['gc_url']
-        // }})
-        dispatch({type:LOAD_DOCUMENTS,docList:respData})
+        else if (!tagsResp.ok){
+            throw new Error('No tags found for current user')
+        }
+        else {
+        dispatch({type:LOAD_DOCUMENTS,docList:docsData,tagList:tagsData})
     }
 
     } 

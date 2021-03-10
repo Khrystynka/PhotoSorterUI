@@ -1,4 +1,5 @@
 import {AsyncStorage} from 'react-native'
+import Base64 from '../../components/UI/Base64'
 export const AUTHENTICATE= "AUTHENTICATE"
 export const authenticate = (userId, token,refreshToken)=>{
     return {
@@ -35,21 +36,17 @@ export const signup = (email,password) =>{
         console.log('RESPONSE FROM FLASK',resData,response.headers)
         dispatch(authenticate(resData.user_id,resData.access_token,resData.refresh_token))
     
-        //    calculate date and time untill token will expire
-        //    multiply by 60000 to convert minutes to ms
         const parseJwt = (token) => {
             try {
-              return JSON.parse(atob(token.split('.')[1]));
+              return new Date(parseInt(JSON.parse(Base64.atob(token.split('.')[1])).exp)*1000).toISOString()
             } catch (e) {
               return null;
             }
           };
-        const tokenExpire = parseJwt(resData.access_token.toString())
-        const tokenExpDate = new Date(new Date().getTime()+parseInt(resData.token_expires*60000)).toISOString()
-        console.log('token expire parsed from token',tokenExpire,'calculated',tokenExpDate)
-        console.log(tokenExpDate)
+        const tokenExpDate= parseJwt(resData.access_token.toString())
+        console.log('token expire parsed from token',tokenExpDate)
         saveDataToStorage(resData.access_token,resData.user_id,resData.refresh_token,tokenExpDate)
-
+        
     }
 }
 export const login = (email,password) =>{
@@ -74,24 +71,16 @@ export const login = (email,password) =>{
             console.log(resData)
             throw new Error('login email or password are not valid! Please try again with another credentials!')
         }
-        console.log('RESPONSE FROM FLASK login',resData)
-        console.log('passing this to auth reucer',resData.user_id,resData.access_token,resData.refresh_token)
         dispatch(authenticate(resData.user_id,resData.access_token,resData.refresh_token))
-    //    calculate date and time untill token will expire
-    //    multiply by 60000 to convert minutes to ms
-        const tokenExpDate = new Date(new Date().getTime()+parseInt(resData.token_expires*60000)).toISOString()
         const parseJwt = (token) => {
             try {
-              return JSON.parse(atob(token.split('.')[1]));
+              return new Date(parseInt(JSON.parse(Base64.atob(token.split('.')[1])).exp)*1000).toISOString()
             } catch (e) {
               return null;
             }
           };
-        const token = resData.access_token.toString()
-        const tokenExpire = parseJwt(token)
-        console.log('token expire parsed from token',tokenExpire,'calculated',tokenExpDate)
-        console.log(tokenExpDate)
-        // const currtime = new Date(new Date().getTime()).toISOString()
+        const tokenExpDate= parseJwt(resData.access_token.toString())
+        console.log('token expire parsed from token',tokenExpDate)
         saveDataToStorage(resData.access_token,resData.user_id,resData.refresh_token,tokenExpDate)
         
     }
@@ -123,12 +112,7 @@ export const protectedRes = () =>{
         dispatch({type:PROTECTED})
     }
 }
-// const LOGOUT= "LOGOUT"
-// export const logout = () =>{
-//     return {
-//         type:LOGOUT
-//     }
-// }
+
 
 const saveDataToStorage=(token,userId,refreshToken,expiryDate) => {
     AsyncStorage.setItem(

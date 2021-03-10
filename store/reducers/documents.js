@@ -7,7 +7,7 @@ import Document from '../../models/Document'
 const initialState={
     touched:true,
     userDocuments: [],
-    userTags:['family','friends','sisters']
+    userTags:[]
 
 }
 export default (state= initialState,action) =>{
@@ -22,11 +22,11 @@ export default (state= initialState,action) =>{
     case LOAD_DOCUMENTS:
                 console.log('in load document reducer')
                 const uploadedDocuments = action.docList.map(item => new Document((item.id).toString(),(item.user_id).toString(),item.title,item.tags,item.url))
-                console.log('doc list ready for state',uploadedDocuments)
-                // console.log('new state',newUserDocuments)
+                
                 return{
                         ...state,
                         userDocuments:uploadedDocuments,
+                        userTags:action.tagList,
                         touched:false
                     }
     default:
