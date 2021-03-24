@@ -2,14 +2,14 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-	ScrollView,
 	StyleSheet,
 	View,
 	Text,
 	Image,
 	Button,
 	TouchableOpacity,
-	TouchableOpacityComponent,
+	FlatList,
+	Alert,
 } from "react-native";
 import Colors from "../../constants/Colors";
 import { TextInput } from "react-native-gesture-handler";
@@ -21,12 +21,13 @@ const EditDocumentScreen = (props) => {
 	console.log("Rendering component EditScreen");
 	const token = useSelector((state) => state.auth.token);
 	console.log("edit screen token", token);
+	const userTags = useSelector((state) => state.documents.userTags);
 
 	const documentId = props.navigation.getParam("documentId");
 	const document = useSelector((state) =>
 		state.documents.userDocuments.find((doc) => doc.id === documentId)
 	);
-	// console.log(document)
+	console.log("Im going to edit this document:", document);
 	if (!document) {
 		props.navigation.navigate("AllUploads");
 	}
@@ -41,10 +42,39 @@ const EditDocumentScreen = (props) => {
 		</TouchableOpacity>
 	));
 
-	const updateDocumentHandler = useCallback(() => {
+	const onAddPrevTagHandler = (ind) => {
+		const newTags = tags.concat(userTags[ind]);
+		setTags(newTags);
+	};
+
+	const renderItem = ({ item }) => {
+		return (
+			<TouchableOpacity
+				onPress={() => onAddPrevTagHandler(item.id)}
+				key={item.id}
+			>
+				<View style={styles.tag}>
+					<Text style={styles.tagText}>{item.title}</Text>
+				</View>
+			</TouchableOpacity>
+		);
+	};
+	const userTagsArray = userTags.map((item, index) => ({
+		id: index,
+		title: item,
+	}));
+
+	const updateDocumentHandler = useCallback(async () => {
 		console.log("Updaing document with tags", tags);
-		dispatch(documentActions.updateDocument(documentId, tags, token));
-		props.navigation.goBack();
+		try {
+			await dispatch(documentActions.updateDocument(documentId, tags, token));
+			props.navigation.goBack();
+		} catch (err) {
+			Alert.alert(
+				"The problem occured while updating the document",
+				err.message
+			);
+		}
 	}, [dispatch, tags, token]);
 	const addTagHandler = () => {
 		console.log("Updating document");
@@ -52,14 +82,11 @@ const EditDocumentScreen = (props) => {
 		setNewTag("");
 	};
 	const inputChangedHandler = (input) => {
-		console.log("ntive", input);
 		setNewTag(input);
-		// e.target.value=''
 	};
 	const onDeleteTagHandler = (ind) => {
 		console.log("Deleting tag", tags[ind]);
 		const newTags = tags.filter((item, index) => index !== ind);
-		// setNewTag(input)
 		setTags(newTags);
 		// e.target.value=''
 	};
@@ -69,8 +96,22 @@ const EditDocumentScreen = (props) => {
 		props.navigation.setParams({ submit: updateDocumentHandler });
 	}, [updateDocumentHandler]);
 
+	let previousTags = (
+		<View style={styles.tagContainer}>
+			<Text style={styles.title}>Previously used tags</Text>
+			<View style={styles.tagList}>
+				<FlatList
+					data={userTagsArray}
+					renderItem={renderItem}
+					keyExtractor={(item) => item.id.toString()}
+					// numColumns={3}
+				></FlatList>
+			</View>
+		</View>
+	);
+
 	return (
-		<ScrollView style={styles.main}>
+		<View style={styles.main}>
 			<Card style={styles.card}>
 				<View style={styles.imgContainer}>
 					<Image style={styles.image} source={{ uri: document.url }} />
@@ -90,8 +131,9 @@ const EditDocumentScreen = (props) => {
 						</View>
 					</View>
 				</View>
+				{previousTags}
 			</Card>
-		</ScrollView>
+		</View>
 	);
 };
 EditDocumentScreen.navigationOptions = (navData) => {
@@ -110,7 +152,7 @@ EditDocumentScreen.navigationOptions = (navData) => {
 const styles = StyleSheet.create({
 	imgContainer: {
 		width: "100%",
-		height: "60%",
+		// height: "60%",
 		borderTopLeftRadius: 10,
 		borderTopRightRadius: 10,
 		overflow: "hidden",
@@ -133,6 +175,7 @@ const styles = StyleSheet.create({
 		borderWidth: 2,
 		borderColor: "grey",
 		margin: 5,
+		flex: 1,
 	},
 	inputGroup: {
 		flexDirection: "row",
@@ -142,6 +185,8 @@ const styles = StyleSheet.create({
 	tagList: {
 		flex: 1,
 		flexDirection: "row",
+		flexWrap: "wrap",
+
 		justifyContent: "center",
 		alignItems: "center",
 	},

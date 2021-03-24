@@ -39,7 +39,7 @@ const DocumentItem = (props) => {
 };
 const styles = StyleSheet.create({
 	document: {
-		margin: 20,
+		margin: 5,
 
 		height: 300,
 	},
@@ -83,6 +83,8 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
+		flexWrap: "wrap",
+		// flexShrink: 1,
 		// height:'25%',
 		// paddingHorizontal:20
 	},

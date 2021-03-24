@@ -9,6 +9,9 @@ import {
 	TouchableOpacity,
 	Image,
 	Button,
+	FlatList,
+	ScrollView,
+	Alert,
 } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
 import Colors from "../../constants/Colors";
@@ -22,11 +25,8 @@ const AddDocumentScreen = (props) => {
 	const userId = useSelector((state) => state.auth.id);
 	const token = useSelector((state) => state.auth.token);
 	const userTags = useSelector((state) => state.documents.userTags);
-	console.log("userId", userId);
-	console.log("token", token);
-
 	const dispatch = useDispatch();
-	const createDocumentHandler = (doc, tags, userId, token) => {
+	const createDocumentHandler = async (doc, tags, userId, token) => {
 		console.log(
 			"creating document with tags",
 			tags,
@@ -35,11 +35,14 @@ const AddDocumentScreen = (props) => {
 			"owner",
 			userId
 		);
-		dispatch(documentActions.createDocument(doc, tags, userId, token));
-		props.navigation.goBack();
+		try {
+			await dispatch(documentActions.createDocument(doc, tags, userId, token));
+			props.navigation.goBack();
+		} catch (err) {
+			Alert.alert("The document cannot be added", err.message);
+		}
 	};
 	const addTagHandler = () => {
-		console.log("Updating document");
 		setTagList([...tagList, newTag]);
 		setNewTag("");
 	};
@@ -50,9 +53,7 @@ const AddDocumentScreen = (props) => {
 	const onDeleteTagHandler = (ind) => {
 		console.log("Deleting tag", tagList[ind]);
 		const newTagList = tagList.filter((item, index) => index !== ind);
-		// setNewTag(input)
 		setTagList(newTagList);
-		// e.target.value=''
 	};
 	const onAddPrevTagHandler = (ind) => {
 		console.log("adding tag", tagList[ind]);
@@ -66,14 +67,22 @@ const AddDocumentScreen = (props) => {
 			</View>
 		</TouchableOpacity>
 	));
-
-	const userTagsArray = userTags.map((item, index) => (
-		<TouchableOpacity onPress={() => onAddPrevTagHandler(index)} key={index}>
-			<View style={styles.tag}>
-				<Text style={styles.tagText}>{item}</Text>
-			</View>
-		</TouchableOpacity>
-	));
+	const renderItem = ({ item }) => {
+		return (
+			<TouchableOpacity
+				onPress={() => onAddPrevTagHandler(item.id)}
+				key={item.id}
+			>
+				<View style={styles.tag}>
+					<Text style={styles.tagText}>{item.title}</Text>
+				</View>
+			</TouchableOpacity>
+		);
+	};
+	const userTagsArray = userTags.map((item, index) => ({
+		id: index,
+		title: item,
+	}));
 	const selectFile = async () => {
 		// Opening Document Picker to select one file
 		try {
@@ -110,7 +119,9 @@ const AddDocumentScreen = (props) => {
 				</View>
 				<View style={styles.tagContainer}>
 					<Text style={styles.title}>Add/remove tags</Text>
-					<View style={styles.tagList}>{tagArray}</View>
+					<ScrollView>
+						<View style={styles.tagList}>{tagArray}</View>
+					</ScrollView>
 					<View style={styles.form}>
 						<View style={styles.inputGroup}>
 							<TextInput
@@ -129,7 +140,14 @@ const AddDocumentScreen = (props) => {
 		previousTags = (
 			<View style={styles.tagContainer}>
 				<Text style={styles.title}>Previously used tags</Text>
-				<View style={styles.tagList}>{userTagsArray}</View>
+				<View style={styles.tagList}>
+					<FlatList
+						data={userTagsArray}
+						renderItem={renderItem}
+						keyExtractor={(item) => item.id}
+						// numColumns={3}
+					></FlatList>
+				</View>
 			</View>
 		);
 	}
@@ -201,6 +219,7 @@ const styles = StyleSheet.create({
 	tagList: {
 		flex: 1,
 		flexDirection: "row",
+		flexWrap: "wrap",
 		justifyContent: "center",
 		alignItems: "center",
 	},
