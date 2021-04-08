@@ -68,12 +68,9 @@ const EditDocumentScreen = (props) => {
 		console.log("Updaing document with tags", tags);
 		try {
 			await dispatch(documentActions.updateDocument(documentId, tags, token));
-			props.navigation.goBack();
+			props.navigation.navigate("AllUploads");
 		} catch (err) {
-			Alert.alert(
-				"The problem occured while updating the document",
-				err.message
-			);
+			Alert.alert("The problem occured while fetching  documents", err.message);
 		}
 	}, [dispatch, tags, token]);
 	const addTagHandler = () => {

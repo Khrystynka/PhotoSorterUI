@@ -12,7 +12,7 @@ const StartupScreen = (props) => {
 	const dispatch = useDispatch();
 	useEffect(() => {
 		const tryLogin = async () => {
-			console.log("im in login");
+			console.log("Trying to auto login");
 			const userData = await AsyncStorage.getItem("userData");
 			console.log("exptracted", userData);
 			if (!userData) {

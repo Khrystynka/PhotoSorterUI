@@ -93,14 +93,10 @@ const AddDocumentScreen = (props) => {
 				console.log("EVERYTHING I FINE", res.uri);
 				setNewDocument(res);
 			} else {
-				console.log("not here");
-
 				// setNewDocument({uri:'',name:''})
 				setNewDocument(null);
 			}
 		} catch (err) {
-			console.log("not here");
-
 			// setNewDocument({uri:'',name:''})
 			setNewDocument(null);
 

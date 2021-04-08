@@ -2,7 +2,45 @@ export const CHANGED_DOCUMENTS = "CHANGED_DOCUMENTS";
 // export const DELETE_DOCUMENT ='DELETE_DOCUMENT'
 // export const CREATE_DOCUMENT = 'CREATE_DOCUMENT'
 export const LOAD_DOCUMENTS = "LOAD_DOCUMENTS";
+export const LOAD_DOCUMENTS_WITH_TAG = "LOAD_DOCUMENTS_WITH_TAG";
 
+export const uploadDocumentsWithTag = (name, token) => {
+	console.log("inside loaddocs with tags action creator", token);
+
+	return async (dispatch) => {
+		try {
+			console.log(
+				"+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+			);
+			console.log("Reaching flask get_uploadds");
+			const docsResp = await fetch(
+				"http://127.0.0.1:5000/for_tag_get_uploads",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`,
+					},
+					body: JSON.stringify({
+						tag: name,
+					}),
+				}
+			);
+			const docsData = await docsResp.json();
+			if (!docsResp.ok) {
+				throw new Error("No uploads found for current tag");
+			} else {
+				dispatch({
+					type: LOAD_DOCUMENTS_WITH_TAG,
+					docList: docsData,
+				});
+			}
+		} catch (err) {
+			console.log(err, err.message);
+			throw err;
+		}
+	};
+};
 export const deleteDocument = (documentId, token) => {
 	console.log("token from delete", token, documentId);
 	return async (dispatch) => {
