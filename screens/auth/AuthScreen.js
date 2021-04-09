@@ -57,7 +57,7 @@ const AuthScreen = (props) => {
 	}, [error]);
 	useEffect(() => {
 		if (isAuth) {
-			props.navigation.navigate("Uploads");
+			props.navigation.navigate("Drawer");
 		}
 	}, [isAuth]);
 

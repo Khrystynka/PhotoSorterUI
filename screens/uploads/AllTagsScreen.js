@@ -96,6 +96,23 @@ AllTagsScreen.navigationOptions = (navData) => {
 
 	return {
 		headerTitle: "Your tags:",
+		headerLeft: () => (
+			<HeaderButtons HeaderButtonComponent={HeaderButton}>
+				<Item
+					title="Menu"
+					iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
+					onPress={() => {
+						console.log("pressed on menu");
+						console.log("avigation", navData.navigation);
+						// navData.navigation.navigate("Drawer");
+						navData.navigation.toggleDrawer();
+					}}
+				>
+					Menu
+				</Item>
+				{/* <Item title='Delete' iconName='md-trash' onPress={deleteFn}/> */}
+			</HeaderButtons>
+		),
 		// headerRight: () => (
 		// 	<HeaderButtons HeaderButtonComponent={HeaderButton}>
 		// 		<Item title="Save" iconName="md-save" onPress={submitFn} />

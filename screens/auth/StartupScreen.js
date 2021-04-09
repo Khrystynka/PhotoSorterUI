@@ -38,10 +38,12 @@ const StartupScreen = (props) => {
 				props.navigation.navigate("Auth");
 				return;
 			}
-			dispatch(authActions.authenticate(userId, token, refreshToken));
+			dispatch(
+				authActions.authenticate(userId, token, refreshToken, expirationDate)
+			);
 
-			props.navigation.navigate("Uploads");
-			// props.navigation.navigate('Auth')
+			props.navigation.navigate("Drawer");
+			// props.navigation.navigate("Drawer");
 		};
 		tryLogin();
 	}, [dispatch]);
