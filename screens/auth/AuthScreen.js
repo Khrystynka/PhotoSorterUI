@@ -57,6 +57,9 @@ const AuthScreen = (props) => {
 	}, [error]);
 	useEffect(() => {
 		if (isAuth) {
+
+
+			console.log('Trying to reach drawer')
 			props.navigation.navigate("Drawer");
 		}
 	}, [isAuth]);

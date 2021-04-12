@@ -1,15 +1,22 @@
 import { AsyncStorage } from "react-native";
 import Base64 from "../../components/UI/Base64";
+// import Date from 'datetime'
 export const AUTHENTICATE = "AUTHENTICATE";
+
+let timer	;
+
 export const authenticate = (userId, token, refreshToken, expiryDate) => {
-	return {
-		type: AUTHENTICATE,
+	const expiryTime = new Date(expiryDate) - new Date()
+	console.log('token expires in',expiryTime)
+	return dispatch=>{
+		dispatch(setLogoutTimer(expiryTime));
+dispatch({type: AUTHENTICATE,
 		userId: userId,
 		token: token,
 		refreshToken: refreshToken,
-		expiryDate: expiryDate,
-	};
-};
+		expiryDate: expiryDate})
+	}
+}
 export const signup = (email, password) => {
 	return async (dispatch) => {
 		const response = await fetch("http://127.0.0.1:5000/register", {
@@ -74,9 +81,7 @@ export const login = (email, password) => {
 				"login email or password are not valid! Please try again with another credentials!"
 			);
 		}
-		dispatch(
-			authenticate(resData.user_id, resData.access_token, resData.refresh_token)
-		);
+		
 		const parseJwt = (token) => {
 			try {
 				return new Date(
@@ -88,6 +93,9 @@ export const login = (email, password) => {
 		};
 		const tokenExpDate = parseJwt(resData.access_token.toString());
 		console.log("token expire parsed from token", tokenExpDate);
+		dispatch(
+			authenticate(resData.user_id, resData.access_token, resData.refresh_token,tokenExpDate)
+		);
 		saveDataToStorage(
 			resData.access_token,
 			resData.user_id,
@@ -98,9 +106,28 @@ export const login = (email, password) => {
 };
 export const LOGOUT = "LOGOUT";
 
+
 export const logout = () => {
-	return { type: LOGOUT };
+	console.log('Inside logout')
+  clearLogoutTimer();
+  AsyncStorage.removeItem("userData");
+  return { type: LOGOUT };
 };
+
+const clearLogoutTimer = () => {
+  if (timer) {
+    clearTimeout(timer);
+  }
+};
+
+const setLogoutTimer = expirationTime => {
+  return dispatch => {
+    timer = setTimeout(() => {
+      dispatch(logout());
+    }, expirationTime);
+  };
+};
+
 
 export const PROTECTED = "PROTECTED";
 export const protectedRes = () => {

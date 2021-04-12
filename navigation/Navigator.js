@@ -1,7 +1,9 @@
 import { React } from "react";
 import { useDispatch } from "react-redux";
 import SafeAreaView from "react-native-safe-area-view";
-import { DrawerNavigatorItems } from "react-navigation-drawer";
+import { DrawerNavigatorItems  } from "react-navigation-drawer";
+// import { DrawerItems } from 'react-navigation-drawer';
+import CustomComponent from '../screens/CustomScreen'
 
 import { Platform } from "react-native";
 import { createStackNavigator } from "react-navigation-stack";
@@ -11,7 +13,7 @@ import {
 	// createDrawerNavigator,
 } from "react-navigation";
 import { createDrawerNavigator } from "react-navigation-drawer";
-import { View, TextInput, Button } from "react-native";
+import { View, Text,TextInput, Button } from "react-native";
 // import { DrawerItems, SafeAreaView } from "react-navigation";
 
 import AuthScreen from "../screens/auth/AuthScreen";
@@ -34,16 +36,10 @@ const defaultNavOptions = {
 	// },
 	headerTintColor: Platform.OS === "android" ? "white" : Colors.primary,
 };
-const CustomDrawerContentComponent = (props) => (
-	<ScrollView>
-		<SafeAreaView
-			style={styles.container}
-			forceInset={{ top: "always", horizontal: "never" }}
-		>
-			<DrawerNavigatorItems {...props} />
-		</SafeAreaView>
-	</ScrollView>
-);
+
+// var CustomComp = (props) => {
+// 	return(<View></View>)
+// }
 
 // const contComponent = (props) => {
 // 	console.log("PROOOOPS", props);
@@ -104,6 +100,7 @@ const TagsNavigator = createStackNavigator(
 	}
 );
 const DrawerNavigator = createDrawerNavigator(
+
 	{
 		Uploads: UploadsNavigator,
 		Tags: TagsNavigator,
@@ -114,12 +111,32 @@ const DrawerNavigator = createDrawerNavigator(
 			activeTintColor: Colors.primary,
 		},
 
-		defaultNavigationOptions: defaultNavOptions,
+		// defaultNavigationOptions: defaultNavOptions,
 
-		// contentComponent: (props) => CustomDrawerContentComponent(props),
+		contentComponent: CustomComponent
+		// () => {
+			// console.log('PROPS',props)
+    //   const dispatch = useDispatch();
+    //   return (<View>
+
+	//    {/* <DrawerNavigatorItems {...props} /> */}
+	//   </View>);
+    // }
 	}
-);
-
+)
+{/* <View style={{ flex: 1, paddingTop: 20 }}>
+          <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
+            <DrawerItems {...props} />
+            <Button
+              title="Logout"
+              color={Colors.primary}
+              onPress={() => {
+                dispatch(authActions.logout());
+                // props.navigation.navigate('Auth');
+              }}
+            />
+          </SafeAreaView>
+        </View> */}
 const MainNavigator = createSwitchNavigator(
 	{
 		Startup: StartupScreen,

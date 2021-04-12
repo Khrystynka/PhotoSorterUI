@@ -41,7 +41,7 @@ const StartupScreen = (props) => {
 			dispatch(
 				authActions.authenticate(userId, token, refreshToken, expirationDate)
 			);
-
+console.log('Trying to reach drawer')
 			props.navigation.navigate("Drawer");
 			// props.navigation.navigate("Drawer");
 		};
