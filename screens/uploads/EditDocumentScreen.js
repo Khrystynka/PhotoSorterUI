@@ -10,9 +10,13 @@ import {
 	TouchableOpacity,
 	FlatList,
 	Alert,
+	ScrollView,
+	KeyboardAvoidingView
 } from "react-native";
 import Colors from "../../constants/Colors";
 import { TextInput } from "react-native-gesture-handler";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 import * as documentActions from "../../store/actions/documents";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderButton";
@@ -93,7 +97,7 @@ const EditDocumentScreen = (props) => {
 	};
 	const deleteDocumentHandler = useCallback(async() => {
 		console.log('indide deleting document handler')
-		  await Alert.alert("Confirm deletion", "Document will be permanently deleted", [
+		   Alert.alert("Confirm deletion", "Document will be permanently deleted", [
 			{ text: "No", style: "default" },
 			{
 				text: "Yes",
@@ -141,14 +145,24 @@ props.navigation.navigate("AllUploads");
 	);
 
 	return (
-		<View style={styles.main}>
+		// <View style={styles.main}>
+												// <KeyboardAvoidingView style={styles.main} behavior={"padding"}> 
+<KeyboardAwareScrollView>
 			<Card style={styles.card}>
+
+			{/* <KeyboardAvoidingView  behavior={Platform.OS === "ios" ? "padding" : "height"}>  */}
 				<View style={styles.imgContainer}>
 					<Image style={styles.image} source={{ uri: document.url }} />
 				</View>
+				 
+    
 				<View style={styles.tagContainer}>
+
+    
 					<Text style={styles.title}>Add/remove tags</Text>
+					<ScrollView>
 					<View style={styles.tagList}>{tagList}</View>
+					</ScrollView>
 					<View style={styles.form}>
 						<View style={styles.inputGroup}>
 							<TextInput
@@ -161,9 +175,14 @@ props.navigation.navigate("AllUploads");
 						</View>
 					</View>
 				</View>
+									
+
 				{previousTags}
 			</Card>
-		</View>
+								{/* </KeyboardAvoidingView> */}
+								</KeyboardAwareScrollView>
+
+		// </View>
 	);
 };
 EditDocumentScreen.navigationOptions = (navData) => {
@@ -226,7 +245,7 @@ const styles = StyleSheet.create({
 		height: 300,
 	},
 	title: {
-		fontSize: 20,
+		fontSize: 16,
 		color: Colors.primary,
 		textAlign: "center",
 		marginVertical: 20,

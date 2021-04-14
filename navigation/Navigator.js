@@ -74,7 +74,7 @@ const DrawerNavigator = createDrawerNavigator(
 			activeTintColor: Colors.primary,
 		},
 
-		// defaultNavigationOptions: defaultNavOptions,
+		defaultNavigationOptions: defaultNavOptions,
 
 		contentComponent: CustomComponent})
 
@@ -86,12 +86,13 @@ const MainNavigator = createSwitchNavigator(
 		Drawer: DrawerNavigator,
 	},
 	{
-		defaultNavigationOptions: {
-			headerStyle: {
-				backgroundColor: Platform.OS === "android" ? Colors.primary : "white",
-			},
-			headerTintColor: Platform.OS === "android" ? "white" : Colors.primary,
-		},
+		defaultNavigationOptions:defaultNavOptions
+		//  {
+		// 	headerStyle: {
+		// 		backgroundColor: Platform.OS === "android" ? Colors.primary : "white",
+		// 	},
+		// 	headerTintColor: Platform.OS === "android" ? "white" : Colors.primary,
+		// },
 	}
 );
 

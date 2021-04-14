@@ -1,6 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import Navigator from './navigation/Navigator' 
+// import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+
 import { StyleSheet, Text, SafeAreaView,View,TextInput,Button } from 'react-native';
 import {createStore, combineReducers,applyMiddleware} from 'redux'
 import {Provider} from 'react-redux'

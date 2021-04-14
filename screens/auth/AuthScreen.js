@@ -11,6 +11,7 @@ import {
 	Button,
 	Alert,
 	ProgressViewIOSComponent,
+	SafeAreaView
 } from "react-native";
 import Input from "../../components/UI/Input";
 import { useDispatch } from "react-redux";
@@ -96,21 +97,22 @@ const AuthScreen = (props) => {
 						secureTextEntry
 						autoCorrect={false}
 						onInputChange={(value) => setPassword(value)}
-					/>
+					/></View>
 					{isLoading ? (
 						<ActivityIndicator />
-					) : (<View>
+					) : (<View style={styles.btncontainer}>
 						<Button style ={styles.button}
 							title={signupMode ? "Sign Up" : "Login"}
 							onPress={authHandler}
 						></Button>
+<View style={styles.separator} />
 					
 					<Button style ={styles.button}
 						title={signupMode ? "Switch to Login" : "Switch to Sign Up"}
 						onPress={() => setSignupMode((prevState) => !prevState)}
 					></Button>
 					</View>)}
-				</View>
+				
 			{/* </LinearGradient> */}
 		</KeyboardAvoidingView>
 	);
@@ -124,8 +126,13 @@ const styles = StyleSheet.create({
 		width: "80%",
 		maxWidth: 400,
 		maxHeight: 400,
-		padding: 15,
+		padding: 10,
 	},
+	separator: {
+    marginVertical: 8,
+    borderBottomColor: '#737373',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
 	screen: {
 		flex: 1,
 		height: "100%",
@@ -136,9 +143,19 @@ const styles = StyleSheet.create({
 	button:{
 		
 		color:"white",
-		width:"60%",
+		width:"70%",
 		margin:15,
-		padding:5
+		padding:15,
+		borderRadius:10
+	},
+	btncontainer:{
+		// alignItems: "center",
+		// justifyContent: "center",
+
+		margin:10
+		
+
+
 	}
 });
 export default AuthScreen;

@@ -1,5 +1,5 @@
 // import { StatusBar } from 'expo-status-bar';
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	TextInput,
@@ -12,11 +12,33 @@ import {
 	FlatList,
 	ScrollView,
 	Alert,
+	KeyboardAvoidingView
 } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
+import * as  ImagePicker from "expo-image-picker";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 import Colors from "../../constants/Colors";
 import Card from "../../components/UI/Card";
 import * as documentActions from "../../store/actions/documents";
+
+  
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
+
 
 const AddDocumentScreen = (props) => {
 	const [newDocument, setNewDocument] = useState(null);
@@ -42,6 +64,16 @@ const AddDocumentScreen = (props) => {
 			Alert.alert("The document cannot be added", err.message);
 		}
 	};
+	useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
+  }, []);
 	const addTagHandler = () => {
 		setTagList([...tagList, newTag]);
 		setNewTag("");
@@ -82,13 +114,40 @@ const AddDocumentScreen = (props) => {
 		id: index,
 		title: item,
 	}));
-	const selectFile = async () => {
+	// const selectFile = async () => {
+	// 	// Opening Document Picker to select one file
+	// 	try {
+	// 		const res = await DocumentPicker.getDocumentAsync();
+	// 		console.log("type", res, res.type);
+
+	// 		if (res.type == "success") {
+	// 			console.log("EVERYTHING I FINE", res.uri);
+	// 			setNewDocument(res);
+	// 		} else {
+	// 			// setNewDocument({uri:'',name:''})
+	// 			setNewDocument(null);
+	// 		}
+	// 	} catch (err) {
+	// 		// setNewDocument({uri:'',name:''})
+	// 		setNewDocument(null);
+
+	// 		throw err;
+	// 	}
+	// };
+const selectFile= async () => {
 		// Opening Document Picker to select one file
 		try {
-			const res = await DocumentPicker.getDocumentAsync();
-			console.log("type", res, res.type);
+			// const res = await ImagePicker.launchCameraAsync();
+			// console.log("type", res, res.type);
+let res = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-			if (res.type == "success") {
+    console.log('picked',res)
+			if (res.cancelled == false) {
 				console.log("EVERYTHING I FINE", res.uri);
 				setNewDocument(res);
 			} else {
@@ -96,6 +155,7 @@ const AddDocumentScreen = (props) => {
 				setNewDocument(null);
 			}
 		} catch (err) {
+			console.log('An error occured',err)
 			// setNewDocument({uri:'',name:''})
 			setNewDocument(null);
 
@@ -108,7 +168,7 @@ const AddDocumentScreen = (props) => {
 let uploadBTN=null
 	if (newDocument) {
 		documentDetails = (
-			<View>
+			<View style = {styles.detailsContainer}>  
 				<View style={styles.imgContainer}>
 					<Image style={styles.image} source={{ uri: newDocument.uri }} />
 				</View>
@@ -156,7 +216,10 @@ uploadBTN=(<TouchableOpacity
 	}
 
 	return (
-		<View style={styles.main}>
+		// <KeyboardAwareScrollView>
+		<KeyboardAvoidingView style={styles.main}   behavior={"height"}
+> 
+		{/* <View > */}
 			<Card style={styles.card}>
 				<View style={styles.btnContainer}>
 					<TouchableOpacity
@@ -168,10 +231,15 @@ uploadBTN=(<TouchableOpacity
 					</TouchableOpacity>
 					{uploadBTN}
 				</View>
+				
 				{documentDetails}
+
 				{previousTags}
+				
 			</Card>
-		</View>
+		{/* </View> */}
+		{/* </KeyboardAwareScrollView> */}
+		</KeyboardAvoidingView>
 	);
 };
 AddDocumentScreen.navigationOptions = {
@@ -206,6 +274,11 @@ const styles = StyleSheet.create({
 		margin: 5,
 		flex: 1,
 	},
+	detailsContainer: {
+		
+		margin: 5,
+		flex: 3,
+	},
 	inputGroup: {
 		flexDirection: "row",
 		// justifyContent:'space-between',
@@ -218,12 +291,13 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 	},
+	
 	image: {
 		width: "100%",
 		height: "100%",
 	},
 	title: {
-		fontSize: 20,
+		fontSize: 16,
 		color: Colors.primary,
 		textAlign: "center",
 		marginVertical: 20,

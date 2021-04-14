@@ -75,11 +75,15 @@ export const createDocument = (doc, tags, userId, token) => {
 	console.log(doc, "tags", tags);
 	let data = new FormData();
 	let type = "*";
-	const fileEnding = doc.name.split(".").pop();
+	// const fileEnding = doc.name.split(".").pop();
+	const filename = doc.uri.split("/").pop()
+	const fileEnding = doc.type
 	data.append("file", {
 		uri: doc.uri, // this is the path to your file. see Expo ImagePicker or React Native ImagePicker
-		type: `${type}/${fileEnding}`, // example: image/jpg
-		name: doc.name, // example: upload.jpg
+		// type: `${type}/${fileEnding}`, // example: image/jpg
+		type:"image/jpg",
+		// name: doc.name, // example: upload.jpg
+		name:filename
 	});
 
 	let tags_str = tags.reduce((s, value) => s + "," + value, "").slice(1);

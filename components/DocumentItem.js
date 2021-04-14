@@ -6,6 +6,7 @@ import {
 	StyleSheet,
 	Button,
 	TouchableOpacity,
+	ScrollView
 } from "react-native";
 import Colors from "../constants/Colors";
 import Card from "../components/UI/Card";
@@ -27,7 +28,7 @@ const DocumentItem = (props) => {
 				</View>
 				<View style={styles.details}>
 					<Text style={styles.title}>{props.title}</Text>
-					<View style={styles.tagsContainer}>{tagList}</View>
+					<ScrollView horizontal={true}><View onStartShouldSetResponder={() => true} style={styles.tagsContainer}>{tagList}</View></ScrollView>
 				</View>
 				
 			</Card>
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
 		height: "100%",
 	},
 	title: {
-		fontSize: 18,
+		fontSize: 14,
 		marginVertical: 4,
 	},
 	tagText: {
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
-		flexWrap: "wrap",
+		// flexWrap: "wrap",
 		// flexShrink: 1,
 		// height:'25%',
 		// paddingHorizontal:20
@@ -96,8 +97,8 @@ const styles = StyleSheet.create({
 	
 	details: {
 		alignItems: "center",
-		height: "25%",
-		padding: 10,
+		height: "40%",
+		padding: 5,
 	},
 });
 export default DocumentItem;
