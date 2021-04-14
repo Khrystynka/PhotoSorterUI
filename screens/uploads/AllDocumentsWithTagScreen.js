@@ -62,7 +62,7 @@ const AllDocumentsWithTagScreen = (props) => {
 		return (
 			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
 				<Text color={Colors.accent}>Something went wrong</Text>
-				<Button onPress={() => loadDocuments()} title="Try again!" />
+				<Button onPress={() => loadDocumentsWithTag()} title="Try again!" />
 			</View>
 		);
 	}

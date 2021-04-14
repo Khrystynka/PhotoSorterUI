@@ -26,51 +26,13 @@ import AllDocumentsWithTagScreen from "../screens/uploads/AllDocumentsWithTagScr
 import Colors from "../constants/Colors";
 const defaultNavOptions = {
 	headerStyle: {
-		backgroundColor: Platform.OS === "android" ? Colors.primary : "",
+		backgroundColor: Platform.OS === "android" ? Colors.primary : "white",
 	},
-	// headerTitleStyle: {
-	// 	fontFamily: "open-sans-bold",
-	// },
-	// headerBackTitleStyle: {
-	// 	fontFamily: "open-sans",
-	// },
+	
 	headerTintColor: Platform.OS === "android" ? "white" : Colors.primary,
 };
 
-// var CustomComp = (props) => {
-// 	return(<View></View>)
-// }
 
-// const contComponent = (props) => {
-// 	console.log("PROOOOPS", props);
-// 	// const dispatch = useDispatch();
-// 	return (
-// 		<View style={{ flex: 1, paddingTop: 20 }}>
-// 			<SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
-// 				<DrawerNavigatorItems {...props} />
-// 				<Button
-// 					title="Logout"
-// 					color={Colors.primary}
-// 					onPress={() => {
-// 						console.log("log me OUT!");
-// 						// dispatch(authActions.logout());
-// 						// props.navigation.navigate("Auth");
-// 					}}
-// 				/>
-// 			</SafeAreaView>
-// 		</View>
-// 	);
-// };
-// const contComponent = (props) => {
-
-// return (
-// <DrawerContentScrollView {...props}>
-//       <DrawerItemList {...props} />
-//       <DrawerItem
-//         label="Help"
-//         onPress={() => console.log('here')}
-//       />
-//     </DrawerContentScrollView>)
 const AuthNavigator = createStackNavigator(
 	{
 		Auth: AuthScreen,
@@ -102,8 +64,9 @@ const TagsNavigator = createStackNavigator(
 const DrawerNavigator = createDrawerNavigator(
 
 	{
-		Uploads: UploadsNavigator,
+		"Uploads": UploadsNavigator,
 		Tags: TagsNavigator,
+		// "Upload document":AddDocumentScreen,
 		// Documents: UploadsNavigator,
 	},
 	{
@@ -113,30 +76,8 @@ const DrawerNavigator = createDrawerNavigator(
 
 		// defaultNavigationOptions: defaultNavOptions,
 
-		contentComponent: CustomComponent
-		// () => {
-			// console.log('PROPS',props)
-    //   const dispatch = useDispatch();
-    //   return (<View>
+		contentComponent: CustomComponent})
 
-	//    {/* <DrawerNavigatorItems {...props} /> */}
-	//   </View>);
-    // }
-	}
-)
-{/* <View style={{ flex: 1, paddingTop: 20 }}>
-          <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
-            <DrawerItems {...props} />
-            <Button
-              title="Logout"
-              color={Colors.primary}
-              onPress={() => {
-                dispatch(authActions.logout());
-                // props.navigation.navigate('Auth');
-              }}
-            />
-          </SafeAreaView>
-        </View> */}
 const MainNavigator = createSwitchNavigator(
 	{
 		Startup: StartupScreen,
@@ -147,7 +88,7 @@ const MainNavigator = createSwitchNavigator(
 	{
 		defaultNavigationOptions: {
 			headerStyle: {
-				backgroundColor: Platform.OS === "android" ? Colors.primary : "",
+				backgroundColor: Platform.OS === "android" ? Colors.primary : "white",
 			},
 			headerTintColor: Platform.OS === "android" ? "white" : Colors.primary,
 		},
@@ -155,4 +96,3 @@ const MainNavigator = createSwitchNavigator(
 );
 
 export default createAppContainer(MainNavigator);
-// export default createAppContainer(DrawerNavigator);

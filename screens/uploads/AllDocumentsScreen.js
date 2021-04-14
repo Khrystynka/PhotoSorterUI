@@ -29,6 +29,8 @@ const AllDocumentsScreen = (props) => {
 		setIsLoading(true);
 		try {
 			console.log("useeffect from alldocuments screen");
+			console.log("DOCUMENTS CHANGED!!!!",documentsChanged)
+			console.log("TOKEN!!!",token)
 			if (documentsChanged) {
 				await dispatch(documentActions.loadDocuments(token));
 			}
@@ -39,6 +41,7 @@ const AllDocumentsScreen = (props) => {
 		setIsLoading(false);
 	}, [token, documentsChanged, dispatch]);
 	useEffect(() => {
+		console.log('[ALL Douments screen,Use effect]')
 		loadDocuments();
 	}, [dispatch, loadDocuments, token, documentsChanged]);
 
@@ -59,10 +62,10 @@ const AllDocumentsScreen = (props) => {
 					}
 				},
 			},
-			{ text: "Maybe", style: "default" },
+		
 		]);
 	};
-	console.log("documents uploaded", documents);
+	// console.log("documents uploaded", documents);
 	if (isLoading) {
 		return (
 			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -123,9 +126,6 @@ AllDocumentsScreen.navigationOptions = (navData) => {
 					title="Menu"
 					iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
 					onPress={() => {
-						console.log("pressed on menu");
-						console.log("avigation", navData.navigation);
-						// navData.navigation.navigate("Drawer");
 						navData.navigation.toggleDrawer();
 					}}
 				>
@@ -136,8 +136,9 @@ AllDocumentsScreen.navigationOptions = (navData) => {
 		),
 		headerRight: () => (
 			<View style={styles.headerRight}>
-				<HeaderButtons HeaderButtonComponent={HeaderButton}>
+				{/* <HeaderButtons HeaderButtonComponent={HeaderButton}>
 					<Text
+					
 						onPress={() => {
 							console.log("SHOWING ALL TAGS");
 							navData.navigation.navigate("AllTags");
@@ -145,12 +146,11 @@ AllDocumentsScreen.navigationOptions = (navData) => {
 					>
 						Tags
 					</Text>
-					{/* <Item title='Delete' iconName='md-trash' onPress={deleteFn}/> */}
-				</HeaderButtons>
+				</HeaderButtons> */}
 				<HeaderButtons HeaderButtonComponent={HeaderButton}>
 					<Item
 						title="Add new"
-						iconName="md-add"
+						iconName={Platform.OS === "android" ? "md-add" : "ios-add"}
 						onPress={() => {
 							console.log("adding new docs");
 							navData.navigation.navigate("AddDocument");

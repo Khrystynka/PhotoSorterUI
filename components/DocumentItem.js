@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import Colors from "../constants/Colors";
 import Card from "../components/UI/Card";
+import { Ionicons } from "@expo/vector-icons";
+
 const DocumentItem = (props) => {
 	const tagList = props.tags.map((tag, ind) => (
 		<View style={styles.tag} key={ind}>
@@ -20,24 +22,27 @@ const DocumentItem = (props) => {
 			<Card style={styles.document}>
 				<View style={styles.imgcontainer}>
 					<Image style={styles.image} source={{ uri: props.url }} />
+					<Ionicons style={styles.close} name="ios-close-circle" size={30} onPress={props.onDeleteDocument}/>
+
 				</View>
 				<View style={styles.details}>
 					<Text style={styles.title}>{props.title}</Text>
 					<View style={styles.tagsContainer}>{tagList}</View>
 				</View>
-				<View style={styles.btncontainer}>
-					<Button
-						title="Change Tags"
-						color={Colors.primary}
-						onPress={props.onChangeTags}
-					/>
-					<Button title="Delete" color="red" onPress={props.onDeleteDocument} />
-				</View>
+				
 			</Card>
 		</TouchableOpacity>
 	);
 };
 const styles = StyleSheet.create({
+	close: {
+    margin: 0,
+    position: "absolute",
+	right:0,
+	top:0,
+    color: "red",
+
+  },
 	document: {
 		margin: 5,
 
@@ -88,13 +93,7 @@ const styles = StyleSheet.create({
 		// height:'25%',
 		// paddingHorizontal:20
 	},
-	btncontainer: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-		height: "15%",
-		paddingHorizontal: 8,
-	},
+	
 	details: {
 		alignItems: "center",
 		height: "25%",

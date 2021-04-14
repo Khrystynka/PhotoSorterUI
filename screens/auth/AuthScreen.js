@@ -13,33 +13,10 @@ import {
 	ProgressViewIOSComponent,
 } from "react-native";
 import Input from "../../components/UI/Input";
-import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch } from "react-redux";
 import * as authActions from "../../store/actions/auth";
 
-// const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE'
-// const formReducer = (state,action) =>{
-//   if (action.type === FORM_INPUT_UPDATE){
-//     const updatedValues = {
-//       ...state.inputValues,
-//       [action.input]:action.value
-//     };
-//     const updatedValidities={
-//       ...state.inputValidities,
-//       [action.input]: action.isValid
-//     };
-//   let updatedFormIsValid = true;
-//   for (const key in updatedValidities){
-//     updatedFormIsValid = updatedFormIsValid &&updatedValidities[key]
-//   }
-//   return{
-//     formIsValid: updatedFormIsValid,
-//     inputValidities: updatedValidities,
-//     inputValues:updatedValues
-//   };
-//   }
-//   return state;
-// }
+
 
 const AuthScreen = (props) => {
 	const [error, setError] = useState(null);
@@ -93,30 +70,15 @@ const AuthScreen = (props) => {
 
 		setIsLoading(false);
 	};
-	// const protectedHandler =()=>{
-	//   console.log('protected')
-	//   dispatch(authActions.protectedRes())
-	// }
-
-	// const inputChangeHandler = useCallback(
-	//   (inputIdentifier, inputValue, inputValidity)=>{
-	//   dispatchFormState({
-	//     type: FORM_INPUT_UPDATE,
-	//     value: inputValue,
-	//     isValid: inputValidity,
-	//     input:inputIdentifier
-
-	//   })
-	// },
-	// [dispatchFormState]
-	// );
+	
 	return (
 		<KeyboardAvoidingView
 			behaviour="padding"
 			keyboardVerticalOffset={50}
 			style={styles.screen}
 		>
-			<LinearGradient colors={["#ffedff", "#ffe3ff"]} style={styles.gradient}>
+			{/* <LinearGradient colors={["#ffedff", "#ffe3ff"]} style={styles.gradient}> */}
+			
 				<View style={styles.form}>
 					<Input
 						id="email"
@@ -131,28 +93,25 @@ const AuthScreen = (props) => {
 						id="password"
 						label="Password"
 						keyboardType="default"
-						// required
-						// minLength={5}
 						secureTextEntry
 						autoCorrect={false}
 						onInputChange={(value) => setPassword(value)}
 					/>
 					{isLoading ? (
 						<ActivityIndicator />
-					) : (
-						<Button
+					) : (<View>
+						<Button style ={styles.button}
 							title={signupMode ? "Sign Up" : "Login"}
-							color="green"
 							onPress={authHandler}
 						></Button>
-					)}
-					<Button
+					
+					<Button style ={styles.button}
 						title={signupMode ? "Switch to Login" : "Switch to Sign Up"}
-						color="green"
 						onPress={() => setSignupMode((prevState) => !prevState)}
 					></Button>
+					</View>)}
 				</View>
-			</LinearGradient>
+			{/* </LinearGradient> */}
 		</KeyboardAvoidingView>
 	);
 };
@@ -165,16 +124,21 @@ const styles = StyleSheet.create({
 		width: "80%",
 		maxWidth: 400,
 		maxHeight: 400,
-		padding: 20,
+		padding: 15,
 	},
-	gradient: {
+	screen: {
+		flex: 1,
 		height: "100%",
 		width: "100%",
 		alignItems: "center",
 		justifyContent: "center",
 	},
-	screen: {
-		flex: 1,
-	},
+	button:{
+		
+		color:"white",
+		width:"60%",
+		margin:15,
+		padding:5
+	}
 });
 export default AuthScreen;

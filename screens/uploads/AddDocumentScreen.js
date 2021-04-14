@@ -48,7 +48,6 @@ const AddDocumentScreen = (props) => {
 	};
 	const inputChangedHandler = (input) => {
 		setNewTag(input);
-		// e.target.value=''
 	};
 	const onDeleteTagHandler = (ind) => {
 		console.log("Deleting tag", tagList[ind]);
@@ -106,7 +105,7 @@ const AddDocumentScreen = (props) => {
 
 	let documentDetails = <Text>No file picked</Text>;
 	let previousTags = null;
-
+let uploadBTN=null
 	if (newDocument) {
 		documentDetails = (
 			<View>
@@ -132,7 +131,15 @@ const AddDocumentScreen = (props) => {
 				</View>
 			</View>
 		);
-
+uploadBTN=(<TouchableOpacity
+						style={styles.buttonStyle}
+						activeOpacity={0.5}
+						onPress={() => {
+							createDocumentHandler(newDocument, tagList, userId, token);
+						}}
+					>
+						<Text style={styles.buttonTextStyle}>Upload File</Text>
+					</TouchableOpacity>)
 		previousTags = (
 			<View style={styles.tagContainer}>
 				<Text style={styles.title}>Previously used tags</Text>
@@ -159,15 +166,7 @@ const AddDocumentScreen = (props) => {
 					>
 						<Text style={styles.buttonTextStyle}>Select File</Text>
 					</TouchableOpacity>
-					<TouchableOpacity
-						style={styles.buttonStyle}
-						activeOpacity={0.5}
-						onPress={() => {
-							createDocumentHandler(newDocument, tagList, userId, token);
-						}}
-					>
-						<Text style={styles.buttonTextStyle}>Upload File</Text>
-					</TouchableOpacity>
+					{uploadBTN}
 				</View>
 				{documentDetails}
 				{previousTags}

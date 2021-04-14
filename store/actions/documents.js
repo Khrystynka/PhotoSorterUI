@@ -14,7 +14,7 @@ export const uploadDocumentsWithTag = (name, token) => {
 			);
 			console.log("Reaching flask get_uploadds");
 			const docsResp = await fetch(
-				"http://127.0.0.1:5000/for_tag_get_uploads",
+				"https://doc-organizer.herokuapp.com/for_tag_get_uploads",
 				{
 					method: "POST",
 					headers: {
@@ -45,7 +45,7 @@ export const deleteDocument = (documentId, token) => {
 	console.log("token from delete", token, documentId);
 	return async (dispatch) => {
 		try {
-			const response = await fetch("http://127.0.0.1:5000/delete", {
+			const response = await fetch("https://doc-organizer.herokuapp.com/delete", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -74,7 +74,7 @@ export const deleteDocument = (documentId, token) => {
 export const createDocument = (doc, tags, userId, token) => {
 	console.log(doc, "tags", tags);
 	let data = new FormData();
-	type = "*";
+	let type = "*";
 	const fileEnding = doc.name.split(".").pop();
 	data.append("file", {
 		uri: doc.uri, // this is the path to your file. see Expo ImagePicker or React Native ImagePicker
@@ -89,7 +89,7 @@ export const createDocument = (doc, tags, userId, token) => {
 
 	return async (dispatch) => {
 		try {
-			const resp = await fetch("http://127.0.0.1:5000/upload", {
+			const resp = await fetch("https://doc-organizer.herokuapp.com/upload", {
 				method: "POST",
 				headers: {
 					Accept: "application/json",
@@ -124,7 +124,7 @@ export const updateDocument = (documentId, tags, token) => {
 	console.log("token from updatedoc", token);
 	return async (dispatch) => {
 		try {
-			const response = await fetch("http://127.0.0.1:5000/modify_tags", {
+			const response = await fetch("https://doc-organizer.herokuapp.com/modify_tags", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -159,7 +159,7 @@ export const loadDocuments = (token) => {
 				"+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 			);
 			console.log("Reaching flask get_uploadds");
-			const docsResp = await fetch("http://127.0.0.1:5000/get_uploads", {
+			const docsResp = await fetch("https://doc-organizer.herokuapp.com/get_uploads", {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
@@ -167,7 +167,7 @@ export const loadDocuments = (token) => {
 				},
 			});
 			const docsData = await docsResp.json();
-			const tagsResp = await fetch("http://127.0.0.1:5000/get_tags", {
+			const tagsResp = await fetch("https://doc-organizer.herokuapp.com/get_tags", {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
