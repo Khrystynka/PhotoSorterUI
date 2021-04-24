@@ -1,20 +1,15 @@
 import { React } from "react";
 import { useDispatch } from "react-redux";
 import SafeAreaView from "react-native-safe-area-view";
-import { DrawerNavigatorItems  } from "react-navigation-drawer";
+import { DrawerNavigatorItems } from "react-navigation-drawer";
 // import { DrawerItems } from 'react-navigation-drawer';
-import CustomComponent from '../screens/CustomScreen'
+import CustomComponent from "../screens/CustomScreen";
 
 import { Platform } from "react-native";
 import { createStackNavigator } from "react-navigation-stack";
-import {
-	createSwitchNavigator,
-	createAppContainer,
-	// createDrawerNavigator,
-} from "react-navigation";
+import { createSwitchNavigator, createAppContainer } from "react-navigation";
 import { createDrawerNavigator } from "react-navigation-drawer";
-import { View, Text,TextInput, Button } from "react-native";
-// import { DrawerItems, SafeAreaView } from "react-navigation";
+import { View, Text, TextInput, Button } from "react-native";
 
 import AuthScreen from "../screens/auth/AuthScreen";
 import StartupScreen from "../screens/auth/StartupScreen";
@@ -28,10 +23,9 @@ const defaultNavOptions = {
 	headerStyle: {
 		backgroundColor: Platform.OS === "android" ? Colors.primary : "white",
 	},
-	
+
 	headerTintColor: Platform.OS === "android" ? "white" : Colors.primary,
 };
-
 
 const AuthNavigator = createStackNavigator(
 	{
@@ -62,9 +56,8 @@ const TagsNavigator = createStackNavigator(
 	}
 );
 const DrawerNavigator = createDrawerNavigator(
-
 	{
-		"Uploads": UploadsNavigator,
+		Uploads: UploadsNavigator,
 		Tags: TagsNavigator,
 		// "Upload document":AddDocumentScreen,
 		// Documents: UploadsNavigator,
@@ -76,7 +69,9 @@ const DrawerNavigator = createDrawerNavigator(
 
 		defaultNavigationOptions: defaultNavOptions,
 
-		contentComponent: CustomComponent})
+		contentComponent: CustomComponent,
+	}
+);
 
 const MainNavigator = createSwitchNavigator(
 	{
@@ -86,7 +81,7 @@ const MainNavigator = createSwitchNavigator(
 		Drawer: DrawerNavigator,
 	},
 	{
-		defaultNavigationOptions:defaultNavOptions
+		defaultNavigationOptions: defaultNavOptions,
 		//  {
 		// 	headerStyle: {
 		// 		backgroundColor: Platform.OS === "android" ? Colors.primary : "white",

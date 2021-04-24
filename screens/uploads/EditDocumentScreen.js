@@ -1,6 +1,7 @@
 // import { StatusBar } from 'expo-status-bar';
 import React, { useCallback, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+
 import {
 	StyleSheet,
 	View,
@@ -11,30 +12,22 @@ import {
 	FlatList,
 	Alert,
 	ScrollView,
-	KeyboardAvoidingView
+	KeyboardAvoidingView,
 } from "react-native";
 import Colors from "../../constants/Colors";
 import { TextInput } from "react-native-gesture-handler";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-
 import * as documentActions from "../../store/actions/documents";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderButton";
 import Card from "../../components/UI/Card";
 const EditDocumentScreen = (props) => {
-	console.log("Rendering component EditScreen");
 	const token = useSelector((state) => state.auth.token);
-	console.log("edit screen token", token);
 	const userTags = useSelector((state) => state.documents.userTags);
 	const documentId = props.navigation.getParam("documentId");
-	console.log('DOCID',documentId)
- 
 	const document = useSelector((state) =>
 		state.documents.userDocuments.find((doc) => doc.id === documentId)
 	);
-	console.log("Im going to edit this document:", document);
-	if (typeof  document === 'undefined') {
-		console.log("No document to edit")
+	if (!document) {
 		props.navigation.navigate("AllUploads");
 	}
 
@@ -72,9 +65,7 @@ const EditDocumentScreen = (props) => {
 	}));
 
 	const updateDocumentHandler = useCallback(async () => {
-		console.log("Updaing document with tags", tags);
 		try {
-
 			await dispatch(documentActions.updateDocument(documentId, tags, token));
 			props.navigation.navigate("AllUploads");
 		} catch (err) {
@@ -82,7 +73,6 @@ const EditDocumentScreen = (props) => {
 		}
 	}, [dispatch, tags, token]);
 	const addTagHandler = () => {
-		console.log("Updating document");
 		setTags([...tags, newTag]);
 		setNewTag("");
 	};
@@ -90,99 +80,72 @@ const EditDocumentScreen = (props) => {
 		setNewTag(input);
 	};
 	const onDeleteTagHandler = (ind) => {
-		console.log("Deleting tag", tags[ind]);
 		const newTags = tags.filter((item, index) => index !== ind);
 		setTags(newTags);
-		// e.target.value=''
 	};
-	const deleteDocumentHandler = useCallback(async() => {
-		console.log('indide deleting document handler')
-		   Alert.alert("Confirm deletion", "Document will be permanently deleted", [
+	const deleteDocumentHandler = useCallback(async () => {
+		Alert.alert("Confirm deletion", "Document will be permanently deleted", [
 			{ text: "No", style: "default" },
 			{
 				text: "Yes",
 				style: "destructive",
-				onPress:  async() => {
-					console.log("deleteing document", documentId);
+				onPress: async () => {
 					try {
-
 						await dispatch(documentActions.deleteDocument(documentId, token));
-
-
-
 					} catch (err) {
-						Alert.alert("An error occured while deleting the document",err);
+						Alert.alert("An error occured while deleting the document", err);
 					}
 				},
 			},
-			]
-	
-		)
-props.navigation.navigate("AllUploads");
-	// },[dispatch])
-	},[dispatch,documentId,token]);
+		]);
+		props.navigation.navigate("AllUploads");
+	}, [dispatch, documentId, token]);
 
 	useEffect(() => {
-		console.log("Inside UseEFFECT");
-
-		props.navigation.setParams({ submit: updateDocumentHandler,delete:deleteDocumentHandler });
-		
-		
-	}, [updateDocumentHandler,deleteDocumentHandler]);
+		props.navigation.setParams({
+			submit: updateDocumentHandler,
+			delete: deleteDocumentHandler,
+		});
+	}, [updateDocumentHandler, deleteDocumentHandler]);
 
 	let previousTags = (
-		<View style={styles.tagContainer}>
-			<Text style={styles.title}>Previously used tags</Text>
+		<View>
+			<Text style={styles.title}>Select from previously used tags:</Text>
 			<View style={styles.tagList}>
 				<FlatList
 					data={userTagsArray}
 					renderItem={renderItem}
 					keyExtractor={(item) => item.id.toString()}
-					// numColumns={3}
+					// numColumns={2}
 				></FlatList>
 			</View>
 		</View>
 	);
 
 	return (
-		// <View style={styles.main}>
-												// <KeyboardAvoidingView style={styles.main} behavior={"padding"}> 
-<KeyboardAwareScrollView>
-			<Card style={styles.card}>
-
-			{/* <KeyboardAvoidingView  behavior={Platform.OS === "ios" ? "padding" : "height"}>  */}
-				<View style={styles.imgContainer}>
-					<Image style={styles.image} source={{ uri: document.url }} />
-				</View>
-				 
-    
-				<View style={styles.tagContainer}>
-
-    
-					<Text style={styles.title}>Add/remove tags</Text>
-					<ScrollView>
+		<Card style={styles.card}>
+			<View style={styles.imgContainer}>
+				<Image style={styles.image} source={{ uri: document.url }} />
+			</View>
+			<View style={styles.tagContainer}>
+				<Text style={styles.title}>Add/remove tags</Text>
+				<ScrollView>
 					<View style={styles.tagList}>{tagList}</View>
-					</ScrollView>
-					<View style={styles.form}>
-						<View style={styles.inputGroup}>
-							<TextInput
-								style={styles.input}
-								keyboardType="default"
-								onChangeText={inputChangedHandler}
-								value={newTag}
-							></TextInput>
-							<Button title="Add tag" onPress={addTagHandler}></Button>
-						</View>
+				</ScrollView>
+				<View style={styles.form}>
+					<View style={styles.inputGroup}>
+						<TextInput
+							style={styles.input}
+							keyboardType="default"
+							onChangeText={inputChangedHandler}
+							value={newTag}
+						></TextInput>
+						<Button title="Add tag" onPress={addTagHandler}></Button>
 					</View>
 				</View>
-									
-
-				{previousTags}
-			</Card>
-								{/* </KeyboardAvoidingView> */}
-								</KeyboardAwareScrollView>
-
-		// </View>
+			</View>
+			<View style={styles.tagContainer}>{previousTags}</View>
+		</Card>
 	);
 };
 EditDocumentScreen.navigationOptions = (navData) => {
@@ -194,7 +157,7 @@ EditDocumentScreen.navigationOptions = (navData) => {
 		headerRight: () => (
 			<HeaderButtons HeaderButtonComponent={HeaderButton}>
 				<Item title="Save" iconName="md-save" onPress={submitFn} />
-				<Item title='Delete' iconName='md-trash' onPress={ deleteFn}/>
+				<Item title="Delete" iconName="md-trash" onPress={deleteFn} />
 			</HeaderButtons>
 		),
 	};
@@ -206,6 +169,7 @@ const styles = StyleSheet.create({
 		borderTopLeftRadius: 10,
 		borderTopRightRadius: 10,
 		overflow: "hidden",
+		flex: 1,
 	},
 	main: {
 		flex: 1,
@@ -217,15 +181,20 @@ const styles = StyleSheet.create({
 		flex: 1,
 		margin: 10,
 		justifyContent: "center",
-		// alignItems:'center',
+		alignItems: "center",
 		// height:'100%'
 	},
+
 	tagContainer: {
 		borderRadius: 8,
 		borderWidth: 2,
 		borderColor: "grey",
 		margin: 5,
 		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+		// width:"100%"
+		// overflow:'scroll'
 	},
 	inputGroup: {
 		flexDirection: "row",
@@ -241,14 +210,16 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	image: {
-		width: "100%",
+		// width: "100%",
 		height: 300,
+
+		// flex:1
 	},
 	title: {
 		fontSize: 16,
 		color: Colors.primary,
 		textAlign: "center",
-		marginVertical: 20,
+		margin: 20,
 	},
 	tag: {
 		borderRadius: 4,

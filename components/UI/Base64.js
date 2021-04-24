@@ -20,7 +20,6 @@ const Base64 = {
 
 			block = (block << 8) | charCode;
 		}
-
 		return output;
 	},
 

@@ -5,14 +5,8 @@ export const LOAD_DOCUMENTS = "LOAD_DOCUMENTS";
 export const LOAD_DOCUMENTS_WITH_TAG = "LOAD_DOCUMENTS_WITH_TAG";
 
 export const uploadDocumentsWithTag = (name, token) => {
-	console.log("inside loaddocs with tags action creator", token);
-
 	return async (dispatch) => {
 		try {
-			console.log(
-				"+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-			);
-			console.log("Reaching flask get_uploadds");
 			const docsResp = await fetch(
 				"https://doc-organizer.herokuapp.com/for_tag_get_uploads",
 				{
@@ -36,31 +30,30 @@ export const uploadDocumentsWithTag = (name, token) => {
 				});
 			}
 		} catch (err) {
-			console.log(err, err.message);
 			throw err;
 		}
 	};
 };
 export const deleteDocument = (documentId, token) => {
-	console.log("token from delete", token, documentId);
 	return async (dispatch) => {
 		try {
-			const response = await fetch("https://doc-organizer.herokuapp.com/delete", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${token}`,
-				},
-				body: JSON.stringify({
-					documentId: documentId,
-				}),
-			});
+			const response = await fetch(
+				"https://doc-organizer.herokuapp.com/delete",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`,
+					},
+					body: JSON.stringify({
+						documentId: documentId,
+					}),
+				}
+			);
 			const resData = await response.json();
-			console.log(resData);
 			if (!response.ok) {
 				throw new Error("Please check your credentials");
 			} else {
-				console.log("succes");
 				dispatch({
 					type: CHANGED_DOCUMENTS,
 				});
@@ -72,24 +65,18 @@ export const deleteDocument = (documentId, token) => {
 	};
 };
 export const createDocument = (doc, tags, userId, token) => {
-	console.log(doc, "tags", tags);
 	let data = new FormData();
-	let type = "*";
-	// const fileEnding = doc.name.split(".").pop();
-	const filename = doc.uri.split("/").pop()
-	const fileEnding = doc.type
+	const filename = doc.uri.split("/").pop();
 	data.append("file", {
-		uri: doc.uri, // this is the path to your file. see Expo ImagePicker or React Native ImagePicker
-		// type: `${type}/${fileEnding}`, // example: image/jpg
-		type:"image/jpg",
+		uri: doc.uri,
+
+		type: "image/jpg",
 		// name: doc.name, // example: upload.jpg
-		name:filename
+		name: filename,
 	});
 
 	let tags_str = tags.reduce((s, value) => s + "," + value, "").slice(1);
-	console.log("here are my tags i one string", tags_str);
 	data.append("tags", tags_str);
-	console.log(typeof tags_str);
 
 	return async (dispatch) => {
 		try {
@@ -103,13 +90,6 @@ export const createDocument = (doc, tags, userId, token) => {
 				},
 				body: data,
 			});
-			const respData = await resp.json();
-			console.log(
-				respData["upload_id"],
-				typeof respData["upload_id"],
-				userId,
-				typeof userId
-			);
 
 			if (!resp.ok) {
 				throw new Error("An error occured while uloading");
@@ -125,26 +105,25 @@ export const createDocument = (doc, tags, userId, token) => {
 	};
 };
 export const updateDocument = (documentId, tags, token) => {
-	console.log("token from updatedoc", token);
 	return async (dispatch) => {
 		try {
-			const response = await fetch("https://doc-organizer.herokuapp.com/modify_tags", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${token}`,
-				},
-				body: JSON.stringify({
-					documentId: documentId,
-					tags: tags,
-				}),
-			});
-			const resData = await response.json();
-			console.log(resData);
+			const response = await fetch(
+				"https://doc-organizer.herokuapp.com/modify_tags",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`,
+					},
+					body: JSON.stringify({
+						documentId: documentId,
+						tags: tags,
+					}),
+				}
+			);
 			if (!response.ok) {
 				throw new Error("Please check your credentials");
 			} else {
-				console.log("succes");
 				dispatch({
 					type: CHANGED_DOCUMENTS,
 				});
@@ -155,29 +134,29 @@ export const updateDocument = (documentId, tags, token) => {
 	};
 };
 export const loadDocuments = (token) => {
-	console.log("inside loaddocs action creator", token);
-
 	return async (dispatch) => {
 		try {
-			console.log(
-				"+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+			const docsResp = await fetch(
+				"https://doc-organizer.herokuapp.com/get_uploads",
+				{
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`,
+					},
+				}
 			);
-			console.log("Reaching flask get_uploadds");
-			const docsResp = await fetch("https://doc-organizer.herokuapp.com/get_uploads", {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${token}`,
-				},
-			});
 			const docsData = await docsResp.json();
-			const tagsResp = await fetch("https://doc-organizer.herokuapp.com/get_tags", {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${token}`,
-				},
-			});
+			const tagsResp = await fetch(
+				"https://doc-organizer.herokuapp.com/get_tags",
+				{
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
 			const tagsData = await tagsResp.json();
 
 			if (!docsResp.ok) {
@@ -192,7 +171,6 @@ export const loadDocuments = (token) => {
 				});
 			}
 		} catch (err) {
-			console.log(err, err.message);
 			throw err;
 		}
 	};

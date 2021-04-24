@@ -11,13 +11,11 @@ import {
 	Button,
 	Alert,
 	ProgressViewIOSComponent,
-	SafeAreaView
+	SafeAreaView,
 } from "react-native";
 import Input from "../../components/UI/Input";
 import { useDispatch } from "react-redux";
 import * as authActions from "../../store/actions/auth";
-
-
 
 const AuthScreen = (props) => {
 	const [error, setError] = useState(null);
@@ -35,9 +33,6 @@ const AuthScreen = (props) => {
 	}, [error]);
 	useEffect(() => {
 		if (isAuth) {
-
-
-			console.log('Trying to reach drawer')
 			props.navigation.navigate("Drawer");
 		}
 	}, [isAuth]);
@@ -51,68 +46,59 @@ const AuthScreen = (props) => {
 		}
 		setIsLoading(true);
 		try {
-			console.log("authscreen dispatching action", action);
 			await dispatch(action);
 			setIsAuth(true);
-			console.log(
-				"============================================================================"
-			);
 		} catch (e) {
-			console.log("Custom error messagie", e);
-
-			console.log(e.fileName); // "someFile.js"
-			console.log(e.lineNumber); // 10
-			console.log(e.columnNumber); // 0
-			console.log(e.stack); // "@Scratchpad/2:2:9\n"
-
 			setError(e.message);
-			console.log("here is error from catch", error);
 		}
 
 		setIsLoading(false);
 	};
-	
+
 	return (
 		<KeyboardAvoidingView
 			behaviour="padding"
 			keyboardVerticalOffset={50}
 			style={styles.screen}
 		>
-			{/* <LinearGradient colors={["#ffedff", "#ffe3ff"]} style={styles.gradient}> */}
-			
-				<View style={styles.form}>
-					<Input
-						id="email"
-						label="E-Mail"
-						keyboardType="email-address"
-						autoCapitalize="none"
-						autoCorrect={false}
-						onInputChange={(value) => setEmail(value)}
-					/>
+			<View style={styles.form}>
+				<Input
+					id="email"
+					label="E-Mail"
+					keyboardType="email-address"
+					autoCapitalize="none"
+					autoCorrect={false}
+					onInputChange={(value) => setEmail(value)}
+				/>
 
-					<Input
-						id="password"
-						label="Password"
-						keyboardType="default"
-						secureTextEntry
-						autoCorrect={false}
-						onInputChange={(value) => setPassword(value)}
-					/></View>
-					{isLoading ? (
-						<ActivityIndicator />
-					) : (<View style={styles.btncontainer}>
-						<Button style ={styles.button}
-							title={signupMode ? "Sign Up" : "Login"}
-							onPress={authHandler}
-						></Button>
-<View style={styles.separator} />
-					
-					<Button style ={styles.button}
+				<Input
+					id="password"
+					label="Password"
+					keyboardType="default"
+					secureTextEntry
+					autoCorrect={false}
+					onInputChange={(value) => setPassword(value)}
+				/>
+			</View>
+			{isLoading ? (
+				<ActivityIndicator />
+			) : (
+				<View style={styles.btncontainer}>
+					<Button
+						style={styles.button}
+						title={signupMode ? "Sign Up" : "Login"}
+						onPress={authHandler}
+					></Button>
+					<View style={styles.separator} />
+
+					<Button
+						style={styles.button}
 						title={signupMode ? "Switch to Login" : "Switch to Sign Up"}
 						onPress={() => setSignupMode((prevState) => !prevState)}
 					></Button>
-					</View>)}
-				
+				</View>
+			)}
+
 			{/* </LinearGradient> */}
 		</KeyboardAvoidingView>
 	);
@@ -129,10 +115,10 @@ const styles = StyleSheet.create({
 		padding: 10,
 	},
 	separator: {
-    marginVertical: 8,
-    borderBottomColor: '#737373',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
+		marginVertical: 8,
+		borderBottomColor: "#737373",
+		borderBottomWidth: StyleSheet.hairlineWidth,
+	},
 	screen: {
 		flex: 1,
 		height: "100%",
@@ -140,22 +126,18 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 	},
-	button:{
-		
-		color:"white",
-		width:"70%",
-		margin:15,
-		padding:15,
-		borderRadius:10
+	button: {
+		color: "white",
+		width: "70%",
+		margin: 15,
+		padding: 15,
+		borderRadius: 10,
 	},
-	btncontainer:{
+	btncontainer: {
 		// alignItems: "center",
 		// justifyContent: "center",
 
-		margin:10
-		
-
-
-	}
+		margin: 10,
+	},
 });
 export default AuthScreen;

@@ -1,4 +1,3 @@
-// import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useCallback } from "react";
 import {
 	FlatList,
@@ -21,40 +20,31 @@ const AllDocumentsScreen = (props) => {
 	const [error, setError] = useState();
 	const token = useSelector((state) => state.auth.token);
 	const documentsChanged = useSelector((state) => state.documents.touched);
-
 	const documents = useSelector((state) => state.documents.userDocuments);
 	const dispatch = useDispatch();
 	const loadDocuments = useCallback(async () => {
 		setError(null);
 		setIsLoading(true);
 		try {
-			console.log("useeffect from alldocuments screen");
-			console.log("DOCUMENTS CHANGED!!!!",documentsChanged)
-			console.log("TOKEN!!!",token)
 			if (documentsChanged) {
 				await dispatch(documentActions.loadDocuments(token));
 			}
 		} catch (err) {
-			console.log("error from alldocs component,useEffect", err.message);
 			setError(err.message);
 		}
 		setIsLoading(false);
 	}, [token, documentsChanged, dispatch]);
 	useEffect(() => {
-		console.log('[ALL Douments screen,Use effect]')
 		loadDocuments();
 	}, [dispatch, loadDocuments, token, documentsChanged]);
 
 	const deleteDocumentHandler = (docId, token) => {
-		// console.log(documentId,tags)
-		// dispatch(documentActions.updateDocument(documentId,tags))
 		Alert.alert("Confirm deletion", "Document will be permanently deleted", [
 			{ text: "No", style: "default" },
 			{
 				text: "Yes",
 				style: "destructive",
 				onPress: async () => {
-					console.log("deleteing document", docId);
 					try {
 						await dispatch(documentActions.deleteDocument(docId, token));
 					} catch (err) {
@@ -62,10 +52,8 @@ const AllDocumentsScreen = (props) => {
 					}
 				},
 			},
-		
 		]);
 	};
-	// console.log("documents uploaded", documents);
 	if (isLoading) {
 		return (
 			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -136,23 +124,11 @@ AllDocumentsScreen.navigationOptions = (navData) => {
 		),
 		headerRight: () => (
 			<View style={styles.headerRight}>
-				{/* <HeaderButtons HeaderButtonComponent={HeaderButton}>
-					<Text
-					
-						onPress={() => {
-							console.log("SHOWING ALL TAGS");
-							navData.navigation.navigate("AllTags");
-						}}
-					>
-						Tags
-					</Text>
-				</HeaderButtons> */}
 				<HeaderButtons HeaderButtonComponent={HeaderButton}>
 					<Item
 						title="Add new"
 						iconName={Platform.OS === "android" ? "md-add" : "ios-add"}
 						onPress={() => {
-							console.log("adding new docs");
 							navData.navigation.navigate("AddDocument");
 						}}
 					/>

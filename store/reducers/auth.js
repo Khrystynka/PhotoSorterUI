@@ -1,4 +1,4 @@
-import { AUTHENTICATE,LOGOUT } from "../actions/auth";
+import { AUTHENTICATE, LOGOUT } from "../actions/auth";
 
 const initialState = {
 	id: null,
@@ -7,8 +7,6 @@ const initialState = {
 	expiryDate: null,
 };
 export default (state = initialState, action) => {
-	console.log("auth reducer actiontype", action.type);
-
 	switch (action.type) {
 		case AUTHENTICATE:
 			return {

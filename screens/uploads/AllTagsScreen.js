@@ -5,31 +5,17 @@ import {
 	StyleSheet,
 	View,
 	Text,
-	Image,
-	Button,
 	TouchableOpacity,
 	FlatList,
-	Alert,
 } from "react-native";
 import Colors from "../../constants/Colors";
-import { TextInput } from "react-native-gesture-handler";
-import * as documentActions from "../../store/actions/documents";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderButton";
 import Card from "../../components/UI/Card";
 const AllTagsScreen = (props) => {
-	const token = useSelector((state) => state.auth.token);
 	const userTags = useSelector((state) => state.documents.userTags);
-	const dispatch = useDispatch();
-	// const tagList = tags.map((item, index) => (
-	// 	<TouchableOpacity onPress={() => onDeleteTagHandler(index)} key={index}>
-	// 		<View style={styles.tag}>
-	// 			<Text style={styles.tagText}>{item}</Text>
-	// 		</View>
-	// 	</TouchableOpacity>
-	// ));
+
 	const onSelectTagHandler = async (name) => {
-		console.log("Selected tag:", name);
 		// props.navigation.setParams({ tagName: name });
 		props.navigation.navigate("AllDocumentsWithTag", { tagName: name });
 	};
@@ -49,27 +35,6 @@ const AllTagsScreen = (props) => {
 		id: index,
 		title: item,
 	}));
-
-	// const updateDocumentHandler = useCallback(async () => {
-	// 	console.log("Updaing document with tags", tags);
-	// 	try {
-	// 		console.log("Docs for this tag");
-	// 		// await dispatch(documentActions.updateDocument(documentId, tags, token));
-	// 		// props.navigation.goBack();
-	// 	} catch (err) {
-	// 		Alert.alert(
-	// 			"The problem occured while updating the document",
-	// 			err.message
-	// 		);
-	// 	}
-	// }, [dispatch, tags, token]);
-
-	// const onDeleteTagHandler = (ind) => {
-	// 	console.log("Deleting tag", tags[ind]);
-	// 	const newTags = tags.filter((item, index) => index !== ind);
-	// 	setTags(newTags);
-	// 	// e.target.value=''
-	// };
 
 	let previousTags = (
 		<View style={styles.tagContainer}>
@@ -102,8 +67,6 @@ AllTagsScreen.navigationOptions = (navData) => {
 					title="Menu"
 					iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
 					onPress={() => {
-						console.log("pressed on menu");
-						console.log("avigation", navData.navigation);
 						// navData.navigation.navigate("Drawer");
 						navData.navigation.toggleDrawer();
 					}}

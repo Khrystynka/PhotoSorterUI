@@ -12,7 +12,6 @@ const initialState = {
 	userSelectedTag: "",
 };
 export default (state = initialState, action) => {
-	console.log("document reducer actiontype", action.type);
 	switch (action.type) {
 		case CHANGED_DOCUMENTS:
 			return {
@@ -21,7 +20,6 @@ export default (state = initialState, action) => {
 			};
 
 		case LOAD_DOCUMENTS:
-			console.log("in load document reducer");
 			const uploadedDocuments = action.docList.map(
 				(item) =>
 					new Document(
@@ -40,7 +38,6 @@ export default (state = initialState, action) => {
 				touched: false,
 			};
 		case LOAD_DOCUMENTS_WITH_TAG:
-			console.log("in load document with tag reducer");
 			const uploadedDocumentsWithTag = action.docList.map(
 				(item) =>
 					new Document(

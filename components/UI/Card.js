@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
 		backgroundColor: "white",
 		width: "90%",
 		height: "100%",
-		// justifyContent: "space-between",
 	},
 });
 export default Card;

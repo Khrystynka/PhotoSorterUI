@@ -6,7 +6,7 @@ import {
 	StyleSheet,
 	Button,
 	TouchableOpacity,
-	ScrollView
+	ScrollView,
 } from "react-native";
 import Colors from "../constants/Colors";
 import Card from "../components/UI/Card";
@@ -23,27 +23,36 @@ const DocumentItem = (props) => {
 			<Card style={styles.document}>
 				<View style={styles.imgcontainer}>
 					<Image style={styles.image} source={{ uri: props.url }} />
-					<Ionicons style={styles.close} name="ios-close-circle" size={30} onPress={props.onDeleteDocument}/>
-
+					<Ionicons
+						style={styles.close}
+						name="ios-close-circle"
+						size={30}
+						onPress={props.onDeleteDocument}
+					/>
 				</View>
 				<View style={styles.details}>
 					<Text style={styles.title}>{props.title}</Text>
-					<ScrollView horizontal={true}><View onStartShouldSetResponder={() => true} style={styles.tagsContainer}>{tagList}</View></ScrollView>
+					<ScrollView horizontal={true}>
+						<View
+							onStartShouldSetResponder={() => true}
+							style={styles.tagsContainer}
+						>
+							{tagList}
+						</View>
+					</ScrollView>
 				</View>
-				
 			</Card>
 		</TouchableOpacity>
 	);
 };
 const styles = StyleSheet.create({
 	close: {
-    margin: 0,
-    position: "absolute",
-	right:0,
-	top:0,
-    color: "red",
-
-  },
+		margin: 0,
+		position: "absolute",
+		right: 0,
+		top: 0,
+		color: "red",
+	},
 	document: {
 		margin: 5,
 
@@ -61,7 +70,7 @@ const styles = StyleSheet.create({
 		marginVertical: 8,
 	},
 	image: {
-		width: "100%",
+		// width: "100%",
 		height: "100%",
 	},
 	title: {
@@ -94,7 +103,7 @@ const styles = StyleSheet.create({
 		// height:'25%',
 		// paddingHorizontal:20
 	},
-	
+
 	details: {
 		alignItems: "center",
 		height: "40%",
